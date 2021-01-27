@@ -2,7 +2,9 @@ import React, { useState } from 'react';
 import Button from '@material-ui/core/Button';
 import AddIcon from '@material-ui/icons/Add';
 
-const CreateNote = () => {
+const CreateNote = (props) => {
+
+    const [expand, setExpand] = useState(false);
 
     const [note, setNote] = useState({
         title: "",
@@ -20,34 +22,55 @@ const CreateNote = () => {
             return {
                 ...prevData,
                 [name]: value,
+            };
+        });
+        console.log(note);
+    };
 
 
 
-            }
-        })
-    }
+    const addEvent = () => {
+        props.passNote(note);
+        setNote({
+            title: "",
+            content: "",
+        });
+    };
+
+    const expandIt = () => {
+        setExpand(true);
+    };
+    const btoNormal = () => {
+        setExpand(false);
+    };
 
     return (
         <>
-            <div className="main_note">
+            <div className="main_note" onDoubleClick={btoNormal}>
                 <form>
-                    <input type="text"
-                        name="title"
-                        value={note.title}
-                        onChange={InputEvent}
-                        placeholder="Title"
-                        autoComplete="off" />
+                    {expand ?
+                        <input type="text"
+                            name="title"
+                            value={note.title}
+                            onChange={InputEvent}
+                            placeholder="Title"
+                            autoComplete="off"
+                        /> : null}
+
                     <textarea rows=""
                         column=""
                         name="content"
                         value={note.content}
                         onChange={InputEvent}
-                        placeholder="write a note...">
+                        placeholder="write a note..."
+                        onClick={expandIt}
+                    >
 
                     </textarea>
-                    <Button >
-                        <AddIcon className="plus_sign" />
-                    </Button>
+                    {expand ?
+                        <Button onClick={addEvent}>
+                            <AddIcon className="plus_sign" />
+                        </Button> : null}
                 </form>
             </div>
         </>
